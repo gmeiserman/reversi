@@ -38,7 +38,7 @@ socket.on('join_room_response',function(payload){
         $('#messages').append('<p>New user joinded the room: '+payload.username+'</p>');
 });
 
-socket.on('send_,message_response',function(payload){
+socket.on('send_message_response',function(payload){
         if(payload.result == 'fail'){
                 alert(payload.message);
                 return;

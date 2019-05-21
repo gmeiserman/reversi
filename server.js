@@ -112,7 +112,7 @@ io.sockets.on('connection', function(socket){
         });
 	
 
-        socket.on('send_message', function(payload){
+        socket.on('send_message',function(payload){
                 log('Server received a command', 'send_message',payload);
                 if(('undefined' === typeof payload) || !payload){
                         var error_message='send_message had no payload, command aborted';
