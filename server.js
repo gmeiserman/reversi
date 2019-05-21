@@ -159,7 +159,7 @@ io.sockets.on('connection', function(socket){
 					username: username,
 					message: message
 				};
-		io.socket.in(room).emit('send_message_response',success_data);
+		io.sockets.in(room).emit('send_message_response',success_data);
 		log('Message sent to room ' + room + ' by ' + username);
 	});
 

@@ -43,6 +43,7 @@ socket.on('send_message_response',function(payload){
                 alert(payload.message);
                 return;
         }
+	console.log('Working!');
         $('#messages').append('<p><b>'+payload.username+' says:</b> '+payload.message+'</p>');
 });
 
