@@ -257,3 +257,117 @@ $(function(){
 	socket.emit('join_room',payload);
 
 });
+
+var old_board = [
+									['?','?','?','?','?','?','?','?'],
+									['?','?','?','?','?','?','?','?'],
+									['?','?','?','?','?','?','?','?'],
+									['?','?','?','?','?','?','?','?'],
+									['?','?','?','?','?','?','?','?'],
+									['?','?','?','?','?','?','?','?'],
+									['?','?','?','?','?','?','?','?'],
+									['?','?','?','?','?','?','?','?']
+								];
+var my_color= ' ';
+
+socket.on('game_update',function(payload){
+	console.log('*** Client Log Message : \'game_update\'\n\t payload' + JSON.stringify(payload));
+	
+	/*Check for a good board update*/
+	if(payload.result == 'fail'){
+		console.log(payload.message);
+		window.location.href='lobby.html?username='+username;
+		return;
+	}
+	
+	/*Check for a good board in the payload*/
+	var board = payload.game.board;
+	if('undefined' == typeof board || !board){
+		console.log('Internal error: received a malformed board update from the server');
+		return;
+	}
+	
+	/*Update my color*/
+	if(socket.id == payload.game.player_white.socket){
+		my_color= 'white';
+	}else if(socket.id == payload.game.player_black.socket){
+		my_color='black';
+	}else{
+		window.location.href = 'lobby.html?username=' + username;
+		return;
+	}
+	
+	$('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>');
+	
+	/* Animate changes to the board */
+	var row, column;
+	
+	for(row=0; row <8; row++){
+		for(column=0; column <8; column++){
+			/* If a board space has changed */
+			if(old_board[row][column] != board[row][column]){
+				if(old_board[row][column]=='?' && board[row][column] == ' '){
+					$('#'+row+'_'+column).html('<img src="assets/images/blank.png" alt="empty square" />');
+				}
+				else if(old_board[row][column]=='?' && board[row][column] == 'w'){
+					$('#'+row+'_'+column).html('<img src="assets/images/image_grey.png" alt="white square" />');
+				}
+				else if(old_board[row][column]=='?' && board[row][column] == 'b'){
+					$('#'+row+'_'+column).html('<img src="assets/images/image_blue.png" alt="black square" />');
+				}
+				else if(old_board[row][column]==' ' && board[row][column] == 'w'){
+					$('#'+row+'_'+column).html('<img src="assets/images/image_grey.png" alt="white square" />');
+				}
+				else if(old_board[row][column]==' ' && board[row][column] == 'b'){
+					$('#'+row+'_'+column).html('<img src="assets/images/image_blue.png" alt="black square" />');
+				}
+				else if(old_board[row][column]=='w' && board[row][column] == ' '){
+					$('#'+row+'_'+column).html('<img src="assets/images/blank.png" alt="blank square" />');
+				}
+				else if(old_board[row][column]=='b' && board[row][column] == ' '){
+					$('#'+row+'_'+column).html('<img src="assets/images/blank.png" alt="blank square" />');
+				}
+				else if(old_board[row][column]=='w' && board[row][column] == 'b'){
+					$('#'+row+'_'+column).html('<img src="assets/images/image_blue.png" alt="black square" />');
+				}
+				else if(old_board[row][column]=='b' && board[row][column] == 'w'){
+					$('#'+row+'_'+column).html('<img src="assets/images/image_grey.png" alt="white square" />');
+				}else{
+					$('#'+row+'_'+column).html('<img src="assets/images/error.png" alt="error" />');
+				}
+				
+				/* set up interactivity when something has changed */
+				$('#'+row+'_'+column).off('click');
+				if(board[row][column] == ' '){
+					$('#'+row+'_'+column).addClass('hovered_over');
+					$('#'+row+'_'+column).click(function(r,c){
+						return function(){
+							var payload = {};
+							payload.row = r;
+							payload.column = c;
+							payload.color = my_color;
+							console.log('*** Client log message: \'play_token\' payload: ' +JSON.stringify(payload));
+							socket.emit('play_token',payload);
+						};
+					}(row,column))
+				}
+				else{
+					$('#'+row+'_'+column).removeClass('hovered_over');
+				}
+				
+			}
+		}
+	}
+			old_board = board;	
+});
+
+socket.on('play_toke_response',function(payload){
+	console.log('*** Client Log Message : \'play_token_response\'\n\t payload' + JSON.stringify(payload));
+	
+	/*Check for a good play token response update*/
+	if(payload.result == 'fail'){
+		console.log(payload.message);
+		alert(payload.message);
+		return;
+	}
+});
