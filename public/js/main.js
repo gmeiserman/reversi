@@ -299,7 +299,13 @@ socket.on('game_update',function(payload){
 		return;
 	}
 	
-	$('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>');
+	if(my_color=='black'){
+		$('#my_color').html('<h3 id="my_color">I am blue</h3>');
+	}
+	if(my_color=='white'){
+		$('#my_color').html('<h3 id="my_color">I am grey</h3>');
+	}
+	/*$('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>');*/
 	
 	/* Animate changes to the board */
 	var row, column;
