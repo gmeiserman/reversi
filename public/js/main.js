@@ -271,6 +271,7 @@ var old_board = [
 									['?','?','?','?','?','?','?','?']
 								];
 var my_color= ' ';
+var interval_timer;
 
 socket.on('game_update',function(payload){
 	console.log('*** Client Log Message : \'game_update\'\n\t payload' + JSON.stringify(payload));
@@ -312,13 +313,32 @@ socket.on('game_update',function(payload){
 	var actualColor;
 	
 	if(payload.game.whose_turn==='black'){
-		$('#my_color').append('<h4>It is blue\'s turn </h4>');
-	}else if(payload.game.whose_turn==='black'){
-		$('#my_color').append('<h4>It is grey\'s turn </h4>');
+		$('#my_color').append('<h4>It is blue\'s turn. Elapsed time <span id="elapsed"></span></h4>');
+	}else if(payload.game.whose_turn==='white'){
+		$('#my_color').append('<h4>It is grey\'s turn. Elapsed time <span id="elapsed"></span></h4>');
 	}
 	
 	
 	/*$('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>');*/
+	
+	
+	clearInterval(interval_timer)
+		interval_timer = setInterval(function(last_time){
+			return function(){
+				//Do the work of updating the UI
+				var d = new Date();
+				var elapsedmilli = d.getTime() - last_time;
+				var minutes = Math.floor(elapsedmilli / (60*1000));
+				var seconds = Math.floor((elapsedmilli % (60*1000))/ 1000);
+				
+				if(seconds < 10){
+					$('#elapsed').html(minutes+':0'+seconds)
+				}else{
+					$('#elapsed').html(minutes+':'+seconds)
+				}
+				
+			}}(payload.game.last_move_time)
+		, 1000);
 	
 	/* Animate changes to the board */
 	var row, column;
@@ -419,7 +439,12 @@ socket.on('game_over',function(payload){
 	}
 	
 	/* Jump to a new page */
-	
-	$('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2>');
+	var color;
+	if(payload.who_won == 'black'){
+		color = blue;
+	}else if (payload.who_won == 'white'){
+		color = white;
+	}
+	$('#game_over').html('<h1>Game Over</h1><h2>'+color+' won!</h2>');
 	$('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to lobby</a>');
 });
