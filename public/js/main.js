@@ -441,9 +441,9 @@ socket.on('game_over',function(payload){
 	/* Jump to a new page */
 	var color;
 	if(payload.who_won == 'black'){
-		color = blue;
+		color = 'blue';
 	}else if (payload.who_won == 'white'){
-		color = white;
+		color = 'white';
 	}
 	$('#game_over').html('<h1>Game Over</h1><h2>'+color+' won!</h2>');
 	$('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to lobby</a>');
