@@ -807,14 +807,12 @@ function calculate_valid_moves(who, board){
 				se = valid_move(who,1,1,row,column,board);
 				
 				if( nw || nn || ne || ww || ee || sw || ss || se){
-					console.log('Valid move!');
 					valid[row][column] = who;
 				}
 				
 			}
 		}
 	}
-	console.log(valid);
 	return valid;
 }
 
@@ -944,16 +942,13 @@ function send_game_update(socket,game_id,message){
 		for(column = 0; column < 8;column++){
 			if(games[game_id].legal_moves[row][column] != ' '){
 				count++;
-				console.log('Count is now: '+count);
 			}
 			
 			if(games[game_id].board[row][column]=== 'b'){
 				black++;
-				console.log('Count is now: '+count);
 			}
 			if(games[game_id].board[row][column]=== 'w'){
 				white++;
-				console.log('Count is now: '+count);
 			}
 		}
 	}

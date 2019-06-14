@@ -306,7 +306,7 @@ socket.on('game_update',function(payload){
 		actualColor='blue';
 	}
 	if(my_color=='white'){
-		$('#my_color').html('<h3 id="my_color">I am grey</h3>');
+		$('#my_color').html('<h3 id="my_color">I am yellow</h3>');
 		actualColor='grey';
 	}
 	
@@ -315,7 +315,7 @@ socket.on('game_update',function(payload){
 	if(payload.game.whose_turn==='black'){
 		$('#my_color').append('<h4>It is blue\'s turn. Elapsed time <span id="elapsed"></span></h4>');
 	}else if(payload.game.whose_turn==='white'){
-		$('#my_color').append('<h4>It is grey\'s turn. Elapsed time <span id="elapsed"></span></h4>');
+		$('#my_color').append('<h4>It is yellow\'s turn. Elapsed time <span id="elapsed"></span></h4>');
 	}
 	
 	
@@ -360,28 +360,28 @@ socket.on('game_update',function(payload){
 					$('#'+row+'_'+column).html('<img src="assets/images/blank.png" alt="empty square" />');
 				}
 				else if(old_board[row][column]=='?' && board[row][column] == 'w'){
-					$('#'+row+'_'+column).html('<img src="assets/images/image_grey.png" alt="white square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/blank_to_yellow.gif" alt="white square" />');
 				}
 				else if(old_board[row][column]=='?' && board[row][column] == 'b'){
-					$('#'+row+'_'+column).html('<img src="assets/images/image_blue.png" alt="black square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/blank_to_blue.gif" alt="black square" />');
 				}
 				else if(old_board[row][column]==' ' && board[row][column] == 'w'){
-					$('#'+row+'_'+column).html('<img src="assets/images/image_grey.png" alt="white square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/blank_to_yellow.gif" alt="white square" />');
 				}
 				else if(old_board[row][column]==' ' && board[row][column] == 'b'){
-					$('#'+row+'_'+column).html('<img src="assets/images/image_blue.png" alt="black square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/blank_to_blue.gif" alt="black square" />');
 				}
 				else if(old_board[row][column]=='w' && board[row][column] == ' '){
-					$('#'+row+'_'+column).html('<img src="assets/images/blank.png" alt="blank square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/yellow_to_blank.gif" alt="blank square" />');
 				}
 				else if(old_board[row][column]=='b' && board[row][column] == ' '){
-					$('#'+row+'_'+column).html('<img src="assets/images/blank.png" alt="blank square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/blue_to_blank.gif" alt="blank square" />');
 				}
 				else if(old_board[row][column]=='w' && board[row][column] == 'b'){
-					$('#'+row+'_'+column).html('<img src="assets/images/image_blue.png" alt="black square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/yellow_to_blue.gif" alt="black square" />');
 				}
 				else if(old_board[row][column]=='b' && board[row][column] == 'w'){
-					$('#'+row+'_'+column).html('<img src="assets/images/image_grey.png" alt="white square" />');
+					$('#'+row+'_'+column).html('<img src="assets/images/blue_to_yellow.gif" alt="white square" />');
 				}else{
 					$('#'+row+'_'+column).html('<img src="assets/images/error.png" alt="error" />');
 				}
@@ -396,6 +396,7 @@ socket.on('game_update',function(payload){
 			if(payload.game.whose_turn === my_color){
 				if(payload.game.legal_moves[row][column] === my_color.substr(0,1)){
 					$('#'+row+'_'+column).addClass('hovered_over');
+					console.log('Hovered'); 
 					$('#'+row+'_'+column).click(function(r,c){
 						return function(){
 							var payload = {};
@@ -438,12 +439,13 @@ socket.on('game_over',function(payload){
 		return;
 	}
 	
+	
 	/* Jump to a new page */
 	var color;
 	if(payload.who_won == 'black'){
 		color = 'blue';
 	}else if (payload.who_won == 'white'){
-		color = 'white';
+		color = 'yellow';
 	}
 	$('#game_over').html('<h1>Game Over</h1><h2>'+color+' won!</h2>');
 	$('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to lobby</a>');

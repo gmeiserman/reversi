@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/gmeiserman/reversi#readme",
   "dependencies": {
+    "confetti-js": "0.0.15",
     "node-static": "^0.7.11",
     "socket.io": "^2.0.1"
   }

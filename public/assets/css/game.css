@@ -17,6 +17,7 @@ table#game_board td{
 }
 
 td.hovered_over:hover{
-	background:url('../images/hover.png')
+	background: url('../images/hover.png');
 	background-size: 100% 100%;
-	
+}
+
