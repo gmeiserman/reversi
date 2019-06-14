@@ -449,4 +449,14 @@ socket.on('game_over',function(payload){
 	}
 	$('#game_over').html('<h1>Game Over</h1><h2>'+color+' won!</h2>');
 	$('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to lobby</a>');
+	
+	if(my_color === payload.who_won){
+		popup();
+	}
+
 });
+
+
+	function popup() { 
+ 		window.open('../winner.html','Winner!','height=300,width=150, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no')
+	}
